@@ -31,4 +31,31 @@ export const bookService = {
     );
     return deletedBook;
   },
+
+  // Book search and filter service
+  filterBooksService: async (filterData) => {
+    const { search, language, minPrice, maxPrice } = filterData;
+
+    const filteredQuery = {};
+
+    if (search) {
+      filteredQuery.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { author: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (language) {
+      filteredQuery.language = language;
+    }
+
+    if (minPrice || maxPrice) {
+      filteredQuery.price = {};
+      if (minPrice) filteredQuery.price.$gte = Number(minPrice);
+      if (maxPrice) filteredQuery.price.$lte = Number(maxPrice);
+    }
+
+    const filteredBooks = BookModel.find(filteredQuery)
+    return await filteredBooks
+  },
 };

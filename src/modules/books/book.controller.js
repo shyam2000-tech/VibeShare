@@ -76,3 +76,21 @@ export const deleteBook = async (req, res) => {
     });
   }
 };
+
+// Search and filter API
+export const filterBooks = async (req, res) => {
+  try {
+    const filteredBooks = await bookService.filterBooksService(req.query);
+
+    res.status(200).json({
+      message: "Filtered books : ",
+      data: filteredBooks,
+    });
+    console.log("Filtered books : ",filteredBooks)
+  } catch (error) {
+    res.status(500).json({
+      message: "Error in filterBooks API : ",
+      error,
+    });
+  }
+};
